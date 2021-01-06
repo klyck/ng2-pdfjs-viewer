@@ -2,7 +2,6 @@ import { Component, Input, Output, ViewChild, EventEmitter, ElementRef } from '@
 
 @Component({
   selector: 'ng2-pdfjs-viewer',
-  // tslint:disable-next-line:max-line-length
   template: `<iframe title="ng2-pdfjs-viewer" [hidden]="externalWindow || (!externalWindow && !pdfSrc)" #iframe width="100%" height="100%"></iframe>`
 })
 export class PdfJsViewerComponent {
@@ -13,18 +12,18 @@ export class PdfJsViewerComponent {
   @Output() onDocumentLoad: EventEmitter<any> = new EventEmitter();
   @Output() onPageChange: EventEmitter<any> = new EventEmitter();
   @Input() public viewerFolder: string;
-  @Input() public externalWindow = false;
-  @Input() public showSpinner = true;
+  @Input() public externalWindow: boolean = false;
+  @Input() public showSpinner: boolean = true;
   @Input() public downloadFileName: string;
-  @Input() public openFile = true;
-  @Input() public download = true;
+  @Input() public openFile: boolean = true;
+  @Input() public download: boolean = true;
   @Input() public startDownload: boolean;
-  @Input() public viewBookmark = true;
-  @Input() public print = true;
+  @Input() public viewBookmark: boolean = true;
+  @Input() public print: boolean = true;
   @Input() public startPrint: boolean;
-  @Input() public fullScreen = true;
-  // @Input() public showFullScreen: boolean;
-  @Input() public find = true;
+  @Input() public fullScreen: boolean = true;
+  //@Input() public showFullScreen: boolean;
+  @Input() public find: boolean = true;
   @Input() public zoom: string;
   @Input() public nameddest: string;
   @Input() public pagemode: string;
@@ -35,33 +34,32 @@ export class PdfJsViewerComponent {
   @Input() public scroll: string;
   @Input() public spread: string;
   @Input() public locale: string;
-  @Input() public useOnlyCssZoom = false;
-  @Input() public errorOverride = false;
-  @Input() public errorAppend = true;
+  @Input() public useOnlyCssZoom: boolean = false;
+  @Input() public errorOverride: boolean = false;
+  @Input() public errorAppend: boolean = true;
   @Input() public errorMessage: string;
-  @Input() public diagnosticLogs = true;
-
+  @Input() public diagnosticLogs: boolean = true;
+  
   @Input() public externalWindowOptions: string;
   public viewerTab: any;
   private _src: string | Blob | Uint8Array;
   private _page: number;
-
+  
   @Input()
   public set page(_page: number) {
     this._page = _page;
-    if (this.PDFViewerApplication) {
+    if(this.PDFViewerApplication) {
       this.PDFViewerApplication.page = this._page;
     } else {
-      // tslint:disable-next-line:max-line-length
-      if (this.diagnosticLogs) { console.warn('Document is not loaded yet!!!. Try to set page# after full load. Ignore this warning if you are not setting page# using \'.\' notation. (E.g. pdfViewer.page = 5;)'); }
+      if(this.diagnosticLogs) console.warn("Document is not loaded yet!!!. Try to set page# after full load. Ignore this warning if you are not setting page# using '.' notation. (E.g. pdfViewer.page = 5;)");
     }
   }
 
   public get page() {
-    if (this.PDFViewerApplication) {
+    if(this.PDFViewerApplication) {
       return this.PDFViewerApplication.page;
     } else {
-      if (this.diagnosticLogs) { console.warn('Document is not loaded yet!!!. Try to retrieve page# after full load.'); }
+      if(this.diagnosticLogs) console.warn("Document is not loaded yet!!!. Try to retrieve page# after full load.");
     }
   }
 
@@ -108,13 +106,16 @@ export class PdfJsViewerComponent {
       let event = viewerEvent.data.event;
       let param = viewerEvent.data.param;
       if (this.viewerId == viewerId) {
-        if (this.onBeforePrint && event == 'beforePrint') {
+        if (this.onBeforePrint && event == "beforePrint") {
           this.onBeforePrint.emit();
-        } else if (this.onAfterPrint && event == 'afterPrint') {
+        }
+        else if (this.onAfterPrint && event == "afterPrint") {
           this.onAfterPrint.emit();
-        } else if (this.onDocumentLoad && event == 'pagesLoaded') {
+        }
+        else if (this.onDocumentLoad && event == "pagesLoaded") {
           this.onDocumentLoad.emit(param);
-        } else if (this.onPageChange && event == 'pageChange') {
+        }
+        else if (this.onPageChange && event == "pageChange") {
           this.onPageChange.emit(param);
         }
       }
@@ -122,7 +123,7 @@ export class PdfJsViewerComponent {
   }
 
   ngOnInit(): void {
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
+    window.addEventListener("message", this.receiveMessage.bind(this), false);
     if (!this.externalWindow) { // Load pdf for embedded views
       this.loadPdf();
     }
@@ -145,7 +146,7 @@ export class PdfJsViewerComponent {
     if (this.externalWindow && (typeof this.viewerTab === 'undefined' || this.viewerTab.closed)) {
       this.viewerTab = window.open('', '_blank', this.externalWindowOptions || '');
       if (this.viewerTab == null) {
-        if (this.diagnosticLogs) { console.error('ng2-pdfjs-viewer: For \'externalWindow = true\'. i.e opening in new tab to work, pop-ups should be enabled.'); }
+        if(this.diagnosticLogs) console.error("ng2-pdfjs-viewer: For 'externalWindow = true'. i.e opening in new tab to work, pop-ups should be enabled.");
         return;
       }
 
@@ -178,13 +179,13 @@ export class PdfJsViewerComponent {
     }
 
     let fileUrl;
-    // if (typeof this.src === "string") {
+    //if (typeof this.src === "string") {
     //  fileUrl = this.src;
-    // }
+    //}
     if (this._src instanceof Blob) {
       fileUrl = encodeURIComponent(URL.createObjectURL(this._src));
     } else if (this._src instanceof Uint8Array) {
-      let blob = new Blob([this._src], { type: 'application/pdf' });
+      let blob = new Blob([this._src], { type: "application/pdf" });
       fileUrl = encodeURIComponent(URL.createObjectURL(blob));
     } else {
       fileUrl = this._src;
@@ -216,8 +217,8 @@ export class PdfJsViewerComponent {
     }
 
     if (this.downloadFileName) {
-      if (!this.downloadFileName.endsWith('.pdf')) {
-        this.downloadFileName += '.pdf';
+      if(!this.downloadFileName.endsWith(".pdf")) {
+        this.downloadFileName += ".pdf";
       }
       viewerUrl += `&fileName=${this.downloadFileName}`;
     }
@@ -272,8 +273,8 @@ export class PdfJsViewerComponent {
     if (this.useOnlyCssZoom) {
       viewerUrl += `&useOnlyCssZoom=${this.useOnlyCssZoom}`;
     }
-
-    if (this._page || this.zoom || this.nameddest || this.pagemode) { viewerUrl += '#'; }
+    
+    if (this._page || this.zoom || this.nameddest || this.pagemode) viewerUrl += "#"
     if (this._page) {
       viewerUrl += `&page=${this._page}`;
     }
