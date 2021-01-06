@@ -1,6 +1,7 @@
 {
-  "name": "ng2-pdfjs-viewer",
-  "version": "1.0.0",
+  "name": "pdf-js-fix-version",
+  "version": "1.0.1",
+  "description": "Fix for NG2-PDF-JS non updated npm",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -16,11 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/intbot/ng2-pdfjs-viewer"
+    "url": "https://github.com/klyck/ng2-pdfjs-viewer"
   },
   "author": {
-    "name": "Code1",
-    "email": "codehippie1@gmail.com"
+    "name": "Klyck",
+    "email": ""
   },
   "keywords": [
     "angular",
@@ -32,7 +33,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/intbot/ng2-pdfjs-viewer/issues"
+    "url": "https://github.com/klyck/ng2-pdfjs-viewer/issues"
   },
   "devDependencies": {
     "@angular/common": "^8.2.13",
